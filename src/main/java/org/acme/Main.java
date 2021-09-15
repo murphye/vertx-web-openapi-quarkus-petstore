@@ -43,7 +43,7 @@ public class Main {
                     .put("code", 404)
                     .put("message",
                     (rc.failure() != null) ? rc.failure().getMessage() : "Not Found");
-                    rc.response().setStatusCode(404).putHeader("Content-Type", "application/json").end(errorObject.encode());
+                    rc.response().setStatusCode(404).putHeader("Content-Type", "application/json").endAndForget(errorObject.encode());
         });
 
         apiRouter.errorHandler(400, rc -> {
@@ -51,7 +51,7 @@ public class Main {
                     .put("code", 400)
                     .put("message",
                     (rc.failure() != null) ? rc.failure().getMessage() : "Validation Exception");
-                    rc.response().setStatusCode(400).putHeader("Content-Type", "application/json").end(errorObject.encode());
+                    rc.response().setStatusCode(400).putHeader("Content-Type", "application/json").endAndForget(errorObject.encode());
         });
 
         Router.newInstance(router).mountSubRouter("/", apiRouter); // Convert to Mutiny Router and mount apiRouter at '/'
