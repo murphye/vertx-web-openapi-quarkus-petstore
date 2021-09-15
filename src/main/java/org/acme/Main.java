@@ -58,7 +58,6 @@ public class Main {
     }
 
     void listPets(RoutingContext rc) {
-        System.out.println("List");
         rc.response().setStatusCode(200).putHeader("Content-Type", "application/json").endAndForget(new JsonArray(this.pets).encode());
     }
 
