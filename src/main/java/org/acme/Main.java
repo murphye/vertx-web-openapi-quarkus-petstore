@@ -19,6 +19,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
+
 @ApplicationScoped
 public class Main {
 
@@ -31,6 +34,7 @@ public class Main {
     ));
 
     void init(@Observes io.vertx.ext.web.Router router) {
+
         RouterBuilder routerBuilder = RouterBuilder.createAndAwait(vertx, "META-INF/openapi.yaml");
         routerBuilder.operation("listPets").handler(this::listPets);
         routerBuilder.operation("createPets").handler(this::createPets);
@@ -43,7 +47,7 @@ public class Main {
                     .put("code", 404)
                     .put("message",
                     (rc.failure() != null) ? rc.failure().getMessage() : "Not Found");
-                    rc.response().setStatusCode(404).putHeader("Content-Type", "application/json").endAndForget(errorObject.encode());
+                    rc.response().setStatusCode(404).putHeader(CONTENT_TYPE, APPLICATION_JSON).endAndForget(errorObject.encode());
         });
 
         apiRouter.errorHandler(400, rc -> {
@@ -51,14 +55,14 @@ public class Main {
                     .put("code", 400)
                     .put("message",
                     (rc.failure() != null) ? rc.failure().getMessage() : "Validation Exception");
-                    rc.response().setStatusCode(400).putHeader("Content-Type", "application/json").endAndForget(errorObject.encode());
+                    rc.response().setStatusCode(400).putHeader(CONTENT_TYPE, APPLICATION_JSON).endAndForget(errorObject.encode());
         });
 
         Router.newInstance(router).mountSubRouter("/", apiRouter); // Convert to Mutiny Router and mount apiRouter at '/'
     }
 
     void listPets(RoutingContext rc) {
-        rc.response().setStatusCode(200).putHeader("Content-Type", "application/json").endAndForget(new JsonArray(this.pets).encode());
+        rc.response().setStatusCode(200).putHeader(CONTENT_TYPE, APPLICATION_JSON).endAndForget(new JsonArray(this.pets).encode());
     }
 
     void createPets(RoutingContext rc) {
@@ -75,7 +79,7 @@ public class Main {
 
         if (pet.isPresent()) {
           var jsonObject = JsonObject.mapFrom(pet.get());
-          rc.response().setStatusCode(200).putHeader("Content-Type", "application/json").endAndForget(jsonObject.encode());
+          rc.response().setStatusCode(200).putHeader(CONTENT_TYPE, APPLICATION_JSON).endAndForget(jsonObject.encode());
         }
         else
           rc.fail(404, new Exception("Pet not found"));
