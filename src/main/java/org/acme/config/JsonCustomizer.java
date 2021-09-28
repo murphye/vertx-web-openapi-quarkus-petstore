@@ -1,4 +1,4 @@
-package org.acme;
+package org.acme.config;
 
 import javax.inject.Singleton;
 

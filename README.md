@@ -41,7 +41,7 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./mvnw clean package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:21.2.0-java16
 ```
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+You can then execute your native executable with: `docker run -p 8080:8080 eric/petstore:1.0.0-SNAPSHOT`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
 
