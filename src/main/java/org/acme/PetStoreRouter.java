@@ -23,13 +23,13 @@ public class PetStoreRouter {
 
     void init(@Observes Router router) {
         router.route().handler(BodyHandler.create());
-        final var routerBuilder = RouterBuilder.createAndAwait(vertx, "https://app.swaggerhub.com/apis/murphye/petstore/1.0.0-oas3");
+        var routerBuilder = RouterBuilder.createAndAwait(vertx, "https://raw.githubusercontent.com/murphye/vertx-web-openapi-quarkus-petstore/main/src/main/resources/META-INF/openapi.yaml");
 
         routerBuilder.operation("listPets").handler(this::listPets);
         routerBuilder.operation("createPets").handler(this::createPets);
         routerBuilder.operation("showPetById").handler(this::showPetById);
 
-        final var apiRouter = routerBuilder.createRouter();
+        var apiRouter = routerBuilder.createRouter();
 
         apiRouter.errorHandler(404, rc -> {
             JsonObject errorJson = new JsonObject().put("code", 404).put("message",
