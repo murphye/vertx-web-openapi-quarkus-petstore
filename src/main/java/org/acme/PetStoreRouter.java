@@ -23,7 +23,7 @@ public class PetStoreRouter {
 
     void init(@Observes Router router) {
         router.route().handler(BodyHandler.create());
-        var routerBuilder = RouterBuilder.createAndAwait(vertx, "https://raw.githubusercontent.com/murphye/vertx-web-openapi-quarkus-petstore/main/src/main/resources/META-INF/openapi.yaml");
+        var routerBuilder = RouterBuilder.createAndAwait(vertx, "http://raw.githubusercontent.com/murphye/vertx-web-openapi-quarkus-petstore/main/src/main/resources/META-INF/openapi.yaml");
 
         routerBuilder.operation("listPets").handler(this::listPets);
         routerBuilder.operation("createPets").handler(this::createPets);
